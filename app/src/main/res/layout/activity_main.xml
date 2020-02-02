@@ -78,14 +78,9 @@ android:layout_height="match_parent">
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <ListView
+                    android:id="@+id/list_view"
                     android:layout_width="match_parent"
-                    android:id="@+id/reminderListView"
-                    android:layout_height="match_parent"
-                    android:divider="@color/colorPrimary"
-                    android:dividerHeight="1dp"
-                    >
-
-                </ListView>
+                    android:layout_height="match_parent" />
 
             </RelativeLayout>
 

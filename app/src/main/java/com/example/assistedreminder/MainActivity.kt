@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        listView = findViewById(R.id.reminderListView)
+//        listView = findViewById(R.id.reminderListView)
 
 //        val show1 = AnimationUtils.loadAnimation(this,R.anim.show1);
 //        val show2 = AnimationUtils.loadAnimation(this,R.anim.show2);
@@ -57,6 +57,12 @@ class MainActivity : AppCompatActivity() {
             }
             startActivity(intent)
         }
+
+
+        val data = arrayOf("Android","IOS")
+
+        val reminderAdapter = CustomAdapter(applicationContext, data)
+        list_view.adapter = reminderAdapter
     }
 
 
