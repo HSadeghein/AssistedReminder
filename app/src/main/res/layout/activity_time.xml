@@ -5,19 +5,46 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".TimeActivity">
-    <TextView
-        android:id="@+id/textView"
+
+    <TimePicker
+        android:id="@+id/Timepicker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="174dp"
-        android:layout_marginTop="351dp"
-        android:layout_marginEnd="210dp"
-        android:layout_marginBottom="361dp"
-        android:text="Time"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        android:timePickerMode="spinner"
+        />
+    <DatePicker
+        android:id="@+id/Datepicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Timepicker"
+        android:datePickerMode="spinner"
+        android:calendarViewShown="false"/>
+
+    <EditText
+        android:id="@+id/et_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="Reminder text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Datepicker" />
+
+    <Button
+        android:id="@+id/submit_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="Submit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_message" />
 </androidx.constraintlayout.widget.ConstraintLayout>

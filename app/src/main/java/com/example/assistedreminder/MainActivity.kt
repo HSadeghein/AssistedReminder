@@ -1,12 +1,22 @@
 package com.example.assistedreminder
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.AdapterView
 
 import android.widget.ListView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.room.Room
 
 import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
+
 //import kotlinx.android.synthetic.main.action_button.*
 
 
@@ -23,12 +33,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-//        listView = findViewById(R.id.reminderListView)
-
-//        val show1 = AnimationUtils.loadAnimation(this,R.anim.show1);
-//        val show2 = AnimationUtils.loadAnimation(this,R.anim.show2);
-//        val hide1 = AnimationUtils.loadAnimation(this,R.anim.hide1);
-//        val hide2 = AnimationUtils.loadAnimation(this,R.anim.hide2);
 
 
         fab_map.translationY = 0F
@@ -57,12 +61,52 @@ class MainActivity : AppCompatActivity() {
             }
             startActivity(intent)
         }
+        list_view.onItemClickListener = AdapterView.OnItemClickListener{_,_, position, _->
+            val selected =list_view.adapter.getItem(position) as Reminder
 
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Delete reminder?")
+                .setMessage(selected.message)
+                .setPositiveButton("Delete" ){_,_->
 
-        val data = arrayOf("Android","IOS")
+                    if(selected.time != null) {
+                        val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                        val intent = Intent(this, ReminderReceiver::class.java)
+                        val pending = PendingIntent.getBroadcast(this, selected.uid!!, intent, PendingIntent.FLAG_ONE_SHOT)
+                        manager.cancel(pending)
+                    }
+                    doAsync {
+                        val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "reminders").build()
+                        db.close()
+                        refreshList()
+                    }
+                }
+                .setNegativeButton("Cancel"){dialog,_->
+                    dialog.dismiss()
+                }
+                .show()
+        }
+    }
+    override fun onResume() {
+        super.onResume()
 
-        val reminderAdapter = CustomAdapter(applicationContext, data)
-        list_view.adapter = reminderAdapter
+        refreshList()
+    }
+    private fun refreshList() {
+        doAsync {
+            val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "reminders").build()
+            val reminders = db.reminderDao().getReminders()
+            db.close()
+
+            uiThread {
+                if(reminders.isNotEmpty()) {
+                    val adapter = CustomAdapter(applicationContext, reminders)
+                    list_view.adapter = adapter
+                } else {
+                    Toast.makeText(applicationContext, "No Reminder", 2).show()
+                }
+            }
+        }
     }
 
 
