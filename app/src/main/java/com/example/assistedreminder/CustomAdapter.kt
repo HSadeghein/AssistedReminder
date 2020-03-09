@@ -29,7 +29,7 @@ class CustomAdapter(context:Context, private val list: List<Reminder>) : BaseAda
 
             row.date.text = readableTime
         } else {
-            row.date.text = "No date"
+            row.date.text = list[position].location
         }
 
         return  row
